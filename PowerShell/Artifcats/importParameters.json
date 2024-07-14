@@ -1,0 +1,47 @@
+{
+  "importAllNewApplications": true,
+  "importAllModifiedApplications": true,
+  "importAllPresentationObjects": true,
+  "importAllNewProcesses": true,
+  "importAllModifiedProcesses": true,
+  "importOnlySelectedApplications": [],
+  "importBpsGroups": false,
+  "importOnlySelectedBpsGroups": [],
+  "overwriteAllBusinessEntitiesPrivilegeSettings": false,
+  "overwriteSelectedBusinessEntitiesPrivilegeSettings": [
+  ],
+  "overwriteSecuritySettings": false,
+  "overwriteAllGlobalBusinessRules": false,
+  "overwriteSelectedGlobalBusinessRules": [
+    "0cbe377b-46de-472a-b1a0-9a906b6f52f9"
+  ],
+  "overwriteAllGlobalFormRules": false,
+  "overwriteSelectedGlobalFormRules": [  ],
+  "overwriteAllGlobalFields": false,
+  "overwriteSelectedGlobalFields": [
+  ],
+  "overwriteAllGlobalConstants": false,
+  "overwriteSelectedGlobalConstants": [
+  ],
+  "overwriteAllGlobalAutomations": false,
+  "overwriteSelectedGlobalAutomations": [
+  ],
+  "overwriteAllDataSources": false,
+  "overwriteSelectedDataSources": [
+  ],
+  "overwriteAllConnections": false,
+  "overwriteSelectedConnections": [
+  ],
+  "overwriteAllPluginPackages": false,
+  "overwriteSelectedPluginPackages": [
+  ],
+  "overwriteAllProcessesDeploymentMode": false,
+  "overwriteAllProcessesDeploymentModeMailRecipient": "",
+  "importAllDictionaryElements": false,
+  "overwriteAllDictionaryItems": true,
+  "importOnlySelectedDictionaryElements": [],
+  "importAllDocTemplates": true,
+  "overwriteAllDocTemplates": true,
+  "importOnlySelectedDocTemplates": [],
+  "ignoreNoExistingGUID": true
+}

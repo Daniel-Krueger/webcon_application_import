@@ -149,7 +149,7 @@ function Invoke-AuthenticatedPatchRequest {
 .PARAMETER importFilePath
     The path the the package.
 .PARAMETER importConfigurationFilePath
-    The configuration file path. The default value is  ".\defaultConfiguration.json"
+    The configuration file path. The default value is  ".\Artifcats\defaultConfiguration.json"
 .PARAMETER maxWaitTimeout
     The nnumber of seconds WEBCON BPS will be polled until it is aborted. Default value is 60.
 .Example 
@@ -170,7 +170,7 @@ function Import-WEBCONPackage {
         [string]$importFilePath
         ,
         [Parameter(Mandatory = $false)]
-        [string]$importConfigurationFilePath = ".\defaultConfiguration.json"
+        [string]$importConfigurationFilePath = ".\Artifcats\defaultConfiguration.json"
         ,
         [Parameter(Mandatory = $false)]
         [int]$maxWaitTimeout = 60

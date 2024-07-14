@@ -10,8 +10,10 @@
   "OverwriteAllBusinessEntitiesPrivilegeSettings": false,
   "OverwriteSelectedBusinessEntitiesPrivilegeSettings": null,
   "OverwriteSecuritySettings": false,
-  "OverwriteAllGlobalBusinessRules": true,
-  "OverwriteSelectedGlobalBusinessRules": null,
+  "OverwriteAllGlobalBusinessRules": false,
+  "OverwriteSelectedGlobalBusinessRules": [
+    "0cbe377b-46de-472a-b1a0-9a906b6f52f9"
+  ],
   "OverwriteAllGlobalFormRules": true,
   "OverwriteSelectedGlobalFormRules": null,
   "OverwriteAllGlobalFields": true,
