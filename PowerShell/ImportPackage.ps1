@@ -11,4 +11,4 @@ $dbId = 1
 $importFilePath = ".\DummyApplication.bpe"
 $importConfigurationFilePath = ".\DummyApplication_ImportParameters.json"
 
-Import-Application -dbId $dbId -importFilePath $importFilePath -importConfigurationFilePath $importConfigurationFilePath
+$result = Import-WEBCONPackage -dbId $dbId -importFilePath $importFilePath -importConfigurationFilePath $importConfigurationFilePath
