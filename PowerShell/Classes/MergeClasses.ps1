@@ -1,7 +1,7 @@
 $filesToMerge = @(
     ".\Classes\Api.psm1"
-    #,".\Classes\FormDataGeneration.psm1"
-   ,  ".\Classes\Utility.psm1"
+    ,".\Classes\CustomAPIClasses.psm1"
+   ,  ".\Classes\UtilityClasses.psm1"
 )
 
 $outputFile = ".\MergedClasses.psm1"

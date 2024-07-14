@@ -4,17 +4,8 @@ using module  .\MergedClasses.psm1
 <# WebCon.WorkFlow.Model.Service.Import.ImportStatusEnum
 public enum ImportStatusEnum
 #>
-enum ImportStatus 
-{
-    Error
-    Completed
-    CompletedWithError
-    NotExist
-    Created
-    InProgress
-}
 
-$ErrorActionPreference = 'Inquire'
+$ErrorActionPreference = 'Break'
 # Set's the global configuration information. Secret information are read from a file outside of the repository.
 function Set-WEBCONTargetInformation {
     [CmdletBinding()]
@@ -105,16 +96,31 @@ function Get-MultipartFormData {
         [string]$Boundary
     )
     $fileDataString = [System.Convert]::ToBase64String($FileData)
+	#$enc = [System.Text.Encoding]::GetEncoding('UTF-8')
+   # $enc = [System.Text.Encoding]::GetEncoding('ASCII')
+    #$enc = [System.Text.Encoding]::GetEncoding('iso-8859-1')
+	
+	$fileEnc = $enc.GetString($FileData)
+
 
     $stringBuilder = New-Object System.Text.StringBuilder
     [void]$stringBuilder.AppendLine("--$Boundary")
     [void]$stringBuilder.AppendLine("Content-Disposition: form-data; name=file; filename=$FileName")
     [void]$stringBuilder.AppendLine("Content-Type: application/octet-stream")
     [void]$stringBuilder.AppendLine()
-    [void]$stringBuilder.AppendLine([System.Text.Encoding]::UTF8.GetString($FileData))
-    #[void]$stringBuilder.AppendLine($fileDataString)
+    #[void]$stringBuilder.AppendLine([System.Text.Encoding]::UTF8.GetString($FileData))
+    [void]$stringBuilder.AppendLine($fileEnc)
     [void]$stringBuilder.AppendLine("--$Boundary--")
 
+    $content = [System.Net.Http.MultipartFormDataContent]::new()
+    $fileContent = [System.Net.Http.StreamContent]::new($fileStream)
+    $fileContent.Headers.ContentDisposition = [System.Net.Http.Headers.ContentDispositionHeaderValue]::new("form-data")
+    # Your example had quotes in your literal form-data example so I kept them here
+    $fileContent.Headers.ContentDisposition.Name = '"Filedata"'
+    $fileContent.Headers.ContentDisposition.FileName = '"{0}"' -f $file.Name
+    
+    $fileContent.Headers.ContentType = 'application/octet-stream'
+    $content.Add($fileContent)
     <#
     $lineBreak = "`r`n"
     $contentDisposition = "Content-Disposition: form-data; name=`"file`"; filename=`"$FileName`"" + $lineBreak
@@ -130,6 +136,31 @@ function Get-MultipartFormData {
     return $stringBuilder.ToString()
 }
 
+function Get-MultipartFormData {
+    param (
+        [string]$FileName,
+        [byte[]]$FileData,
+        [string]$Boundary
+    )
+    
+    $lineBreak = "`r`n"
+    $contentDisposition = "Content-Disposition: form-data; name=`"file`"; filename=`"$FileName`"" + $lineBreak
+    $contentType = "Content-Type: application/octet-stream" + $lineBreak + $lineBreak
+    $endBoundary = "--$Boundary--" + $lineBreak
+
+    # Convert file data to base64 string
+    $fileDataString = [System.Convert]::ToBase64String($FileData)
+
+    # Build the form data
+    $formData = "--$Boundary" + $lineBreak
+    $formData += $contentDisposition
+    $formData += $contentType
+    $formData += $fileDataString + $lineBreak
+    $formData += $endBoundary
+
+    return $formData
+}
+
 function Invoke-AuthenticatedUploadFileRequest {
     [CmdletBinding()]
     param (
@@ -143,19 +174,44 @@ function Invoke-AuthenticatedUploadFileRequest {
         $filename
     )
     $uri = "$($global:WEBCONConfig.Hostname)$hostRelativeUri"
+
+    #using MemoryStream memStream = new MemoryStream(chunk);
+	#using HttpContent fileStreamContent = new StreamContent(memStream);
+	#MultipartFormDataContent content = new MultipartFormDataContent { { fileStreamContent, "File", "ImportPackage" } };
+
+
+    $body = [System.Net.Http.MultipartFormDataContent]::new()
+    $memoryStream = new-object System.IO.MemoryStream(,$content) 
+    $fileContent = [System.Net.Http.StreamContent]::new($memoryStream)
+    $fileContent.Headers.ContentDisposition = [System.Net.Http.Headers.ContentDispositionHeaderValue]::new("form-data")
+    # Your example had quotes in your literal form-data example so I kept them here
+    $fileContent.Headers.ContentDisposition.Name = '"file"'
+    $fileContent.Headers.ContentDisposition.FileName = $filename
+    $fileContent.Headers.ContentType = 'application/octet-stream'
+    $body.Add($fileContent)
+
+<#
+
     #$contentBase64 = [System.Convert]::ToBase64String($content)
     $boundary = [System.Guid]::NewGuid().ToString()
     $body = Get-MultipartFormData -FileName $filename -FileData $content -Boundary $boundary
-   
+   # Convert the multipart content to bytes
+$multipartBytes = [System.Text.Encoding]::UTF8.GetBytes($body)
+#>
     Write-Host "Executing request against uri: $uri"    
   
     Return Invoke-RestMethod `
         -Method Post `
         -Uri  $uri `
-        -Body $body `
-        -ContentType "multipart/form-data; boundary=$boundary" `
+        -Body $abc `
+        -Proxy "http://localhost:8000" `
+        -ContentType "multipart/form-data; boundary=`"$boundary`"" `
         -Headers @{"accept" = "application/json"; "Authorization" = "Bearer $($Global:accessToken) " } 
+
         
+        #-ContentType "multipart/form-data; boundary=`"$boundary`"" `
+        
+        #-ContentType "multipart/form-data; boundary=$boundary" `
 
 }
 
@@ -238,16 +294,8 @@ function Import-Application {
             }
         }
         Write-Host "Import completed with status '$status'"
-        
-        if ($status -eq [ImportStatus]::Completed -or $status -eq [ImportStatus]::CompletedWithError ){
-            $importLog = Invoke-AuthenticatedGetRequest -hostRelativeUri "/api/data/$($Global:WEBCONConfig.ApiVersion)/db/$($dbId)/importsessions/$($sessionId)/log" 
-            # Version 2024.1.1.48 the Import log is not of type json. the value is not quoted
-            # { IMPH_Log = <?xml version="1.0" encoding="utf-16"?><ImportLogData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><ImportExportData><Name>DummyApplication 2024.07.13 19:47:59</Name><Description /><PackageVersion><BranchNumber>2024_1_1</BranchNumber><DBVersion>9</DBVersion><BuildVersion>48</BuildVersion><Installation>Standalone</Installation><ExportedAsTemplate>false</ExportedAsTemplate><ExportedFromOneAppOnly>false</ExportedFromOneAppOnly><ImportCompatibilities><ImportCompatibilityListItem><BranchNumber>2024.1.1</BranchNumber><BuildVersion>1</BuildVersion></ImportCompatibilityListItem></ImportCompatibilities></PackageVersion><ExportLog>Import started.
-
-        }
-        else {
-            Write-Host "There's only an import log if the import completed either with or without errors. Otherwise there aren't any logs."
-        }
+        $importLog = Invoke-AuthenticatedGetRequest -hostRelativeUri "/api/data/$($Global:WEBCONConfig.ApiVersion)/db/$($dbId)/importsessions/$($sessionId)/logs"
+               
         
     }
     end {
@@ -270,7 +318,7 @@ function Upload-ImportFile {
         $importFilePath
     )
     begin {
-        $maxChunkSize = 1024 * 30 # 16 kb chunk size
+        $maxChunkSize = 1024 * 300 # 16 kb chunk size
 
         $file = Get-Item $importFilePath   
         $fileContent = [System.IO.File]::ReadAllBytes((Resolve-Path -literalpath $importFilePath))
@@ -288,26 +336,33 @@ function Upload-ImportFile {
         $importSessionsResult = Invoke-AuthenticatedPostRequest -hostRelativeUri "/api/data/$($Global:WEBCONConfig.ApiVersion)/db/$($dbId)/importsessions" -body (ConvertTo-Json $body)           
         $startResult = New-Object WebconImportImportStartResponse $importSessionsResult
         Write-Host "Import session with id $($startResult.sessionId) created for file '$importFilePath'. File size '$($body.totalSize)', chunk size '$($body.chunkSize)' number of chunks '$numberOfChunks'"        
+       <# 
+        $uploadResult = Invoke-RestMethod `
+        -Method Post `
+        -Uri  "$($global:WEBCONConfig.Hostname)/api/data/$($Global:WEBCONConfig.ApiVersion)/db/$($dbId)/importsessions/$($startResult.sessionId)/1" `
+        -Form @{"file" = Get-Item $importFilePath}`
+        -Proxy "http://localhost:8000" `
+        -Headers @{"accept" = "application/json"; "Authorization" = "Bearer $($Global:accessToken) " } 
+#>       
+
        
-        for ($i = 0; $i -lt $numberOfChunks; $i++) {
-            <#
-            $i = 2
-            #> 
+       $tempChunks = Get-Content $importFilePath -AsByteStream -ReadCount $body.chunkSize
+        if ($body.chunkSize -le $body.totalSize) {
+            
+            $chunks = @(,$tempChunks)
+        }
+        else {
+            $chunks = $tempChunks
+        }
+
+        for ($i = 0; $i -lt $chunks.Count; $i++) {                   
             $currentChunkIndex = $i + 1;
-            $startIndex = $i * $body.chunkSize
-            if ($i -eq $numberOfChunks -1) {
-                $endIndex = $totalBytes-1
-            }
-            else {
-                $endIndex = ($startIndex + $importChunkSize)
-            }
-            $endIndex = ($startIndex + $importChunkSize)
-            Write-Host "Current chunk part $startIndex to $($endIndex)"
             [byte[]]$content = $fileContent[$startIndex..($endIndex)]
             $filename = 'Chunk_' + $currentChunkIndex + '_' + $file.Name
-            $uploadResult = Invoke-AuthenticatedUploadFileRequest -hostRelativeUri  "/api/data/$($Global:WEBCONConfig.ApiVersion)/db/$($dbId)/importsessions/$($startResult.sessionId)/$($currentChunkIndex)"  -filename $filename -content $content
-            #Write-Host "Uploaded chunk result: $uploadResult"
+            $uploadResult = Invoke-AuthenticatedUploadFileRequest -hostRelativeUri  "/api/data/$($Global:WEBCONConfig.ApiVersion)/db/$($dbId)/importsessions/$($startResult.sessionId)/$($currentChunkIndex)"  -filename $filename -content $chunks[$i]
+            Write-Host "Uploaded chunk result: $uploadResult" -BackgroundColor Cyan
         }
+
         Write-Host "File uploaded to import session with id $($startResult.sessionId)."
         
        

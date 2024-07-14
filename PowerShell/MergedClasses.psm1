@@ -239,6 +239,16 @@ class WebconImportImportUploadResponse {
 }
 
 
+
+enum ImportStatus 
+{
+    Error
+    Completed
+    CompletedWithError
+    NotExist
+    Created
+    InProgress
+}
 class WEBCONConfig {
     [string]$ClientId
     [string]$ClientSecret
@@ -252,5 +262,7 @@ class WEBCONConfig {
         $this.ApiVersion = $config.ApiVersion
     }
 }
+
+
 
 
