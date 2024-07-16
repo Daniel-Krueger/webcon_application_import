@@ -1,4 +1,4 @@
-using module  .\MergedClasses.psm1
+#using module  .\MergedClasses.psm1
 
 
 $currentDirectory = Get-Item -Path .
@@ -12,3 +12,4 @@ $importFilePath = ".\Artifcats\DummyApplication.bpe"
 $importConfigurationFilePath = ".\Artifcats\importParameters.json"
 
 $result = Import-WEBCONPackage -dbId $dbId -importFilePath $importFilePath -importConfigurationFilePath $importConfigurationFilePath
+#$result = Import-WEBCONPackage -dbId $dbId -importFilePath $importFilePath

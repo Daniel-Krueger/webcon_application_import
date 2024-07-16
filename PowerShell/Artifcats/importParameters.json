@@ -4,44 +4,39 @@
   "importAllPresentationObjects": true,
   "importAllNewProcesses": true,
   "importAllModifiedProcesses": true,
-  "importOnlySelectedApplications": [],
+  "importOnlySelectedApplications": null,
   "importBpsGroups": false,
-  "importOnlySelectedBpsGroups": [],
-  "overwriteAllBusinessEntitiesPrivilegeSettings": false,
-  "overwriteSelectedBusinessEntitiesPrivilegeSettings": [
+  "importOnlySelectedBpsGroups": [
+    "nonexistinggroup@bps.local"
   ],
+  "overwriteAllBusinessEntitiesPrivilegeSettings": false,
+  "overwriteSelectedBusinessEntitiesPrivilegeSettings": null,
   "overwriteSecuritySettings": false,
   "overwriteAllGlobalBusinessRules": false,
   "overwriteSelectedGlobalBusinessRules": [
     "0cbe377b-46de-472a-b1a0-9a906b6f52f9"
   ],
   "overwriteAllGlobalFormRules": false,
-  "overwriteSelectedGlobalFormRules": [  ],
+  "overwriteSelectedGlobalFormRules": null,
   "overwriteAllGlobalFields": false,
-  "overwriteSelectedGlobalFields": [
-  ],
+  "overwriteSelectedGlobalFields": null,
   "overwriteAllGlobalConstants": false,
-  "overwriteSelectedGlobalConstants": [
-  ],
+  "overwriteSelectedGlobalConstants": null,
   "overwriteAllGlobalAutomations": false,
-  "overwriteSelectedGlobalAutomations": [
-  ],
+  "overwriteSelectedGlobalAutomations": null,
   "overwriteAllDataSources": false,
-  "overwriteSelectedDataSources": [
-  ],
+  "overwriteSelectedDataSources": null,
   "overwriteAllConnections": false,
-  "overwriteSelectedConnections": [
-  ],
+  "overwriteSelectedConnections": null,
   "overwriteAllPluginPackages": false,
-  "overwriteSelectedPluginPackages": [
-  ],
+  "overwriteSelectedPluginPackages": null,
   "overwriteAllProcessesDeploymentMode": false,
-  "overwriteAllProcessesDeploymentModeMailRecipient": "",
-  "importAllDictionaryElements": false,
+  "overwriteAllProcessesDeploymentModeMailRecipient": null,
+  "importAllDictionaryElements": true,
   "overwriteAllDictionaryItems": true,
-  "importOnlySelectedDictionaryElements": [],
+  "importOnlySelectedDictionaryElements": null,
   "importAllDocTemplates": true,
   "overwriteAllDocTemplates": true,
-  "importOnlySelectedDocTemplates": [],
+  "importOnlySelectedDocTemplates": null,
   "ignoreNoExistingGUID": true
 }

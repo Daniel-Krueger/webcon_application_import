@@ -2,6 +2,7 @@ using module  .\MergedClasses.psm1
 
 $ErrorActionPreference = 'Break'
 
+
 <#
 .SYNOPSIS
     Set's the global configuration information. Secret information are read from a file outside of the repository.
@@ -29,6 +30,7 @@ function Set-WEBCONTargetInformation {
     }
 } 
 
+#region RestRequests
 <#
 .SYNOPSIS
 Retrieves a access token using the configuration from global::WEBCONConfig and stores it in the global variable $Global::accessToken 
@@ -47,7 +49,6 @@ function Set-AccessToken {
     $Global:accessToken = $authorization.access_token;
 }
 
-#region RestRequests
 function Invoke-AuthenticatedGetRequest {
     [CmdletBinding()]
     param (
