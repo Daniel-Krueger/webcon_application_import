@@ -1,0 +1,16 @@
+﻿{
+    "extensions": [
+        {
+            "guid": "d12f86f0-6304-45b5-94bf-720df95e5f28",
+            "name": "Upload package to import session",
+            "description": "",
+            "assembly": "BPS Actions",
+            "class": "BPS_Actions.UploadPackageToImportSession",
+            "type": "CustomAction"
+        }
+    ],
+    "dependencies": [
+        "BPS Actions"
+    ],
+    "version": "24"
+}

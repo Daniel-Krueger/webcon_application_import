@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34018.315
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPS Actions", "BPS Actions\BPS Actions.csproj", "{533AE3AC-6DCC-419B-BE93-5D0DCFA0021D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{533AE3AC-6DCC-419B-BE93-5D0DCFA0021D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{533AE3AC-6DCC-419B-BE93-5D0DCFA0021D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{533AE3AC-6DCC-419B-BE93-5D0DCFA0021D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{533AE3AC-6DCC-419B-BE93-5D0DCFA0021D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {895D63D8-BDB7-43A1-BC3E-D7D2A609B774}
+	EndGlobalSection
+EndGlobal
